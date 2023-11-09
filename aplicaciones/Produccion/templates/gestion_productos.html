@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <!-- {% load static %} -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="{% static 'css/gestion_productos.css' %}"> -->
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Produccion</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contacto</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Inventario de Productos</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/register_product/" method="POST" id="formulario_inventario">{% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" name="txtNombre" class="form-control" placeholder="Nombre" id="txtNombre" minlength="3" maxlength="30" autofocus required>
+                                <input type="text" name="txtMarca" class="form-control" placeholder="Marca" id="txtMarca" minlength="3" maxlength="30" autofocus required>
+                                <input type="text" name="txtCodigo" class="form-control" placeholder="Código" id="txtCodigo" minlength="3" maxlength="30" autofocus required>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" name="numCantidad" class="form-control" placeholder="Cantidad" id="numCantidad" min="0" max="999999" autofocus required>
+                                <input type="number" name="numDescuento" class="form-control" placeholder="Descuento" id="numDescuento" min="0" max="999999" step="10" autofocus required>
+                                <input type="number" name="numPrecio" class="form-control" placeholder="Precio" id="numPrecio" min="0" max="999999" step="100" autofocus required>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-success btn-block text-white" value="Guardar">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <h2>Listado de Productos</h2>
+                <div class="table-responsive">
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th>Marca</th>
+                                <th>Cantidad</th>
+                                <th>C&oacute;digo</th>
+                                <th>Descuento</th>
+                                <th>Precio</th>
+                                <th>Opciones</th>
+                                
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in object_list %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{c.nombre}}</td>
+                                <td>{{c.marca}}</td>
+                                <td>{{c.cantidad}}</td>
+                                <td>{{c.codigo}}</td>
+                                <td>{{c.descuento}}</td>
+                                <td>{{c.precio}}</td>
+                                <td><a href="update_product/{{c.id}}" class="btn btn-sm btn-block btn-info">Editar</a></td>
+                                <td><a href="delete_product/{{c.id}}" class="btn btn-sm btn-block btn-danger">Eliminar</a></td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<!-- <script src="{% static 'js/gestion_productos.js' %}"></script> -->
+
+<script>
+    const $formulario_inventario = document.getElementById('formulario_inventario');
+    const $txtNombre = document.getElementById('txtNombre');
+    const $txtMarca = document.getElementById('txtMarca');
+    const $txtCodigo = document.getElementById('txtCodigo');
+    const $numCantidad = document.getElementById('numCantidad');
+    const $numDescuento = document.getElementById('numDescuento');
+    const $numPrecio = document.getElementById('numPrecio');
+
+    (function (){
+        $formulario_inventario.addEventListener('submit', function(e){
+        let nombre=String($txtNombre.value).trim();
+        if(nombre.length === 0){
+            alert("Este dato no puede ir vacío")
+            e.preventDefault();            
+        }
+    });
+    })();
+
+    (function (){
+        $formulario_inventario.addEventListener('submit', function(e){
+        let nombre=String($txtMarca.value).trim();
+        if(nombre.length === 0){
+            alert("Este dato no puede ir vacío")
+            e.preventDefault();            
+        }
+    });
+    })();
+    (function (){
+        $formulario_inventario.addEventListener('submit', function(e){
+        let nombre=String($txtCodigo.value).trim();
+        if(nombre.length === 0){
+            alert("Este dato no puede ir vacío")
+            e.preventDefault();            
+        }
+    });
+    })();
+    (function (){
+        $formulario_inventario.addEventListener('submit', function(e){
+        let nombre=String($numCantidad.value).trim();
+        if(nombre.length === 0){
+            alert("Este dato no puede ir vacío")
+            e.preventDefault();            
+        }
+    });
+    })();
+    
+    (function (){
+        $formulario_inventario.addEventListener('submit', function(e){
+        let nombre=String($numPrecio.value).trim();
+        if(nombre.length === 0){
+            alert("Este dato no puede ir vacío")
+            e.preventDefault();            
+        }
+    });
+    })();
+</script>
+    
+</body>
+</html>
